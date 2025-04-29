@@ -1,34 +1,61 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import typescriptEslint from '@typescript-eslint/eslint-plugin'
+import prettier from 'eslint-plugin-prettier'
+import globals from 'globals'
+import tsParser from '@typescript-eslint/parser'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
 
-export default tseslint.config(
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
+})
+
+export default [
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ['**/node_modules/', '**/output/', '**/dist/', '**/playground/'],
   },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
+  ...compat.extends(
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ),
   {
+    plugins: {
+      '@typescript-eslint': typescriptEslint,
+      prettier,
+    },
+
     languageOptions: {
       globals: {
+        ...globals.browser,
         ...globals.node,
-        ...globals.jest,
       },
-      sourceType: 'commonjs',
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
+
+      parser: tsParser,
+      ecmaVersion: 2022,
+      sourceType: 'module',
     },
-  },
-  {
+
     rules: {
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn'
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+          allowTaggedTemplates: true,
+        },
+      ],
     },
   },
-);
+]
