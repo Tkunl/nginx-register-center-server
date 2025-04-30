@@ -7,4 +7,4 @@ import { Global, Module } from '@nestjs/common'
   providers: [],
   exports: [],
 })
-export class BizModule {}
+export class CommonModule {}
