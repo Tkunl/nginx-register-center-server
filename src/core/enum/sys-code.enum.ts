@@ -1,4 +1,3 @@
-// TODO 待优化
 export const enum SysCodeEnum {
   OK = 0,
   ERROR = 10000,

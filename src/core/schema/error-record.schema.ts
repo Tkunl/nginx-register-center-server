@@ -5,10 +5,13 @@ import { BaseRecord } from './base-record'
 export class ErrorRecord extends BaseRecord {
   @Prop()
   errorName: string
+
   @Prop()
   stack: string
+
   @Prop()
   errorMessage: string
+
   @Prop()
   options: string
 
