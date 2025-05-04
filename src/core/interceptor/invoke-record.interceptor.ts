@@ -16,6 +16,14 @@ export class InvokeRecordInterceptor implements NestInterceptor {
   @InjectModel(ErrorRecordName)
   private errorRecordModel: Model<ErrorRecord>
 
+  stringifyAndSubstring(data: unknown) {
+    let dataStr = JSON.stringify(data)
+    if (dataStr.length > 1000) {
+      dataStr = dataStr.substring(0, 100) + '... [TRUNCATED]'
+    }
+    return dataStr
+  }
+
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>,
@@ -32,13 +40,13 @@ export class InvokeRecordInterceptor implements NestInterceptor {
     record.method = method
     // request url path
     record.path = path
-    // query parameters
+    // query parameters, 此处可以直接结构化存储
     record.query = query
-    // path parameters
+    // path parameters, 此处可以直接结构化存储
     record.params = params
     // request body
     if (!loggerConfig.excludesRecordBodyList.some((url: string) => url === path)) {
-      record.requestBody = JSON.stringify(body)
+      record.requestBody = this.stringifyAndSubstring(body)
     }
     record.ip = ip ?? ''
     record.userAgent = userAgent ?? ''
@@ -53,13 +61,13 @@ export class InvokeRecordInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap({
-        next: async (res: any) => {
+        next: async (res: unknown) => {
           const createRecord = new this.invokeRecordModel({
             ...record,
             elapsedTime: Date.now() - now,
-            response: JSON.stringify(res),
+            response: this.stringifyAndSubstring(res),
             httpCode: response.statusCode,
-          }) satisfies InvokeRecord
+          } satisfies InvokeRecord)
           await createRecord.save()
         },
         error: async (err: any) => {
@@ -70,7 +78,7 @@ export class InvokeRecordInterceptor implements NestInterceptor {
             errorMessage: err.message,
             options: JSON.stringify(err.options),
             elapsedTime: Date.now() - now,
-          })
+          } satisfies ErrorRecord)
           await createRecord.save()
         },
       }),

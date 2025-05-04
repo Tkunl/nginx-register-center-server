@@ -1,6 +1,14 @@
-import { Controller } from '@nestjs/common'
+import { Controller, Get, Post } from '@nestjs/common'
 
 @Controller('tdd')
 export class TddController {
-  async helloWorld() {}
+  @Get('hello')
+  async getHelloWorld() {
+    return 'hello'
+  }
+
+  @Post('hello')
+  async postHelloWorld() {
+    return 'hello'
+  }
 }

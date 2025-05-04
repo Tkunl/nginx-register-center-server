@@ -1,7 +1,10 @@
 import { Global, Module } from '@nestjs/common'
+import { APP_INTERCEPTOR } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
-import { InvokeRecordName, InvokeRecordSchema } from './schema/invoke-record.schema'
+import { TddController } from './controller/tdd.controller'
+import { InvokeRecordInterceptor } from './interceptor/invoke-record.interceptor'
 import { ErrorRecordName, ErrorRecordSchema } from './schema/error-record.schema'
+import { InvokeRecordName, InvokeRecordSchema } from './schema/invoke-record.schema'
 
 @Global()
 @Module({
@@ -17,8 +20,13 @@ import { ErrorRecordName, ErrorRecordSchema } from './schema/error-record.schema
       },
     ]),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [TddController],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: InvokeRecordInterceptor,
+    },
+  ],
   exports: [],
 })
 export class CoreModule {}

@@ -1,8 +1,0 @@
-# Db Configs
-MONGODB_URL=mongodb://127.0.0.1:27017/nginx-center
-
-# Minio Configs
-MINIO_PORT=9000
-MINIO_HOST=127.0.0.1 # For MacBook Pro
-MINIO_ACCESS_KEY=70DKLQc2eb5yJ3OBcRkp # For MacBook Pro
-MINIO_SECRET_KEY=hVuDqjwBa884tMBrMr6GXpjfwiSyijscBkdv6bkA # For MacBook Pro
