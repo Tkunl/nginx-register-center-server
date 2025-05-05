@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { BizRequest } from '../type/biz-request.type'
 import { ErrorRecord, ErrorRecordName } from '../schema/error-record.schema'
 import { loggerConfig } from '../config/logger.config'
+import { isNotNil } from 'es-toolkit'
 
 @Injectable()
 export class InvokeRecordInterceptor implements NestInterceptor {
@@ -16,12 +17,16 @@ export class InvokeRecordInterceptor implements NestInterceptor {
   @InjectModel(ErrorRecordName)
   private errorRecordModel: Model<ErrorRecord>
 
-  stringifyAndSubstring(data: unknown) {
-    let dataStr = JSON.stringify(data)
-    if (dataStr.length > 1000) {
-      dataStr = dataStr.substring(0, 100) + '... [TRUNCATED]'
+  stringifyAndSubstring<T>(data: T): T extends object ? string : T
+  stringifyAndSubstring<T>(data: T): string | T {
+    if (isNotNil(data) && typeof data === 'object') {
+      let dataStr = JSON.stringify(data)
+      if (dataStr.length > 1000) {
+        dataStr = dataStr.substring(0, 100) + '... [TRUNCATED]'
+      }
+      return dataStr
     }
-    return dataStr
+    return data
   }
 
   intercept(
@@ -61,7 +66,7 @@ export class InvokeRecordInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap({
-        next: async (res: unknown) => {
+        next: async (res: Response) => {
           const createRecord = new this.invokeRecordModel({
             ...record,
             elapsedTime: Date.now() - now,

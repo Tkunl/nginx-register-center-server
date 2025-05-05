@@ -34,8 +34,8 @@ export class BaseRecord {
   /**
    * requestBody 包含客户端发送的原始请求体内容。
    */
-  @Prop({ maxlength: 1100, trim: true })
-  requestBody: string
+  @Prop({ trim: true })
+  requestBody?: string
 
   /**
    * ip 记录了发起请求的客户端的IP地址。
@@ -76,7 +76,7 @@ export class BaseRecord {
   /**
    * response 包含了服务器返回给客户端的响应体内容。
    */
-  @Prop({ maxlength: 1100, trim: true })
+  @Prop({ trim: true })
   response: string
 
   /**
@@ -84,6 +84,4 @@ export class BaseRecord {
    */
   @Prop({ index: true })
   httpCode: number
-
-  // static configureSchema(schema: Schema) {}
 }

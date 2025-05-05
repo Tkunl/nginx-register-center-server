@@ -10,7 +10,8 @@ import { BizModule } from './biz/biz.module'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [projectConfig],
+      load: [projectConfig], // 加载 yaml 项目配置
+      envFilePath: `.env.${process.env.NODE_ENV}`, // 加载 env 环境配置
     }),
     MongooseModule.forRootAsync({
       useFactory(configSvc: ConfigService) {

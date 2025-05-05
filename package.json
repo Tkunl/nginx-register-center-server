@@ -1,5 +1,5 @@
 {
-  "name": "nginx-regist-center-server",
+  "name": "nginx-register-center-server",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -8,7 +8,9 @@
   "scripts": {
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:macos": "cross-env NODE_ENV=macos nest start --watch",
+    "start:win10": "cross-env NODE_ENV=win10 nest start --watch",
+    "start:watch": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
@@ -42,6 +44,7 @@
     "@types/node": "^22.10.7",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
+    "cross-env": "^7.0.3",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
