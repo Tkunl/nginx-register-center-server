@@ -7,6 +7,9 @@ import { Schema } from 'mongoose'
  * 以及关于请求和响应的一些元数据
  */
 export class BaseRecord {
+  @Prop({ index: true })
+  requestId: string
+
   /**
    * method 表示发起请求时使用的 HTTP 方法 (如 GET, POST 等）。
    */
@@ -32,9 +35,15 @@ export class BaseRecord {
   params: Record<string, unknown>
 
   /**
+   * headers 存储请求头
+   */
+  @Prop({ type: Schema.Types.Mixed })
+  headers: Record<string, unknown>
+
+  /**
    * requestBody 包含客户端发送的原始请求体内容。
    */
-  @Prop({ trim: true })
+  @Prop()
   requestBody?: string
 
   /**
@@ -42,12 +51,6 @@ export class BaseRecord {
    */
   @Prop()
   ip: string
-
-  /**
-   * userAgent 包含了客户端的 User-Agent 字符串，可以用来识别客户端。
-   */
-  @Prop()
-  userAgent: string
 
   /**
    * invokeClass 表示处理该请求的服务端(Controller)类名。
@@ -76,12 +79,12 @@ export class BaseRecord {
   /**
    * response 包含了服务器返回给客户端的响应体内容。
    */
-  @Prop({ trim: true })
+  @Prop()
   response: string
 
   /**
    * httpCode 表示服务器返回给客户端的HTTP状态码。
    */
-  @Prop({ index: true })
+  @Prop()
   httpCode: number
 }

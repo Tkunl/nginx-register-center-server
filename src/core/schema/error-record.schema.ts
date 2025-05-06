@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { BaseRecord } from './base-record'
+import { BaseRecord } from './base-record.schema'
 
 @Schema({ collection: 'error-records' })
 export class ErrorRecord extends BaseRecord {

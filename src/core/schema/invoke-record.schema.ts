@@ -1,5 +1,5 @@
 import { Schema, SchemaFactory } from '@nestjs/mongoose'
-import { BaseRecord } from './base-record'
+import { BaseRecord } from './base-record.schema'
 
 @Schema({ collection: 'invoke-records' })
 export class InvokeRecord extends BaseRecord {

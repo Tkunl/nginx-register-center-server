@@ -1,3 +1,5 @@
 import { Request } from 'express'
 
-export type BizRequest = Request
+export type BizRequest = Request & {
+  requestId: string
+}

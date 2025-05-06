@@ -36,25 +36,25 @@ export class InvokeRecordInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest<BizRequest>()
     const response = context.switchToHttp().getResponse<Response>()
 
-    const userAgent = request.headers['user-agent']
-
-    const { ip, method, path, query, params, body } = request
+    const { ip, method, path, query, params, body, requestId, headers } = request
 
     const record = new InvokeRecord()
+    record.requestId = requestId
     // request method, such as GET, POST ...
     record.method = method
     // request url path
     record.path = path
-    // query parameters, 此处可以直接结构化存储
+    // query parameters, 直接结构化存储
     record.query = query
-    // path parameters, 此处可以直接结构化存储
+    // path parameters, 直接结构化存储
     record.params = params
+    // request headers, 直接结构化存储
+    record.headers = headers
     // request body
     if (!loggerConfig.excludesRecordBodyList.some((url: string) => url === path)) {
       record.requestBody = this.stringifyAndSubstring(body)
     }
     record.ip = ip ?? ''
-    record.userAgent = userAgent ?? ''
     // Controller class name
     record.invokeClass = context.getClass().name
     // Controller handler method name
@@ -66,16 +66,16 @@ export class InvokeRecordInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap({
-        next: async (res: Response) => {
+        next: (res: Response) => {
           const createRecord = new this.invokeRecordModel({
             ...record,
             elapsedTime: Date.now() - now,
             response: this.stringifyAndSubstring(res),
             httpCode: response.statusCode,
           } satisfies InvokeRecord)
-          await createRecord.save()
+          createRecord.save()
         },
-        error: async (err: any) => {
+        error: (err: any) => {
           const createRecord = new this.errorRecordModel({
             ...record,
             errorName: err.name,
@@ -84,7 +84,7 @@ export class InvokeRecordInterceptor implements NestInterceptor {
             options: JSON.stringify(err.options),
             elapsedTime: Date.now() - now,
           } satisfies ErrorRecord)
-          await createRecord.save()
+          createRecord.save()
         },
       }),
     )
