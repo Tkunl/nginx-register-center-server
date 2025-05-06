@@ -22,7 +22,7 @@ export class InvokeRecordInterceptor implements NestInterceptor {
     if (isNotNil(data) && typeof data === 'object') {
       let dataStr = JSON.stringify(data)
       if (dataStr.length > 1000) {
-        dataStr = dataStr.substring(0, 100) + '... [TRUNCATED]'
+        dataStr = dataStr.substring(0, 1000) + '... [TRUNCATED]'
       }
       return dataStr
     }
@@ -33,10 +33,10 @@ export class InvokeRecordInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
-    const request = context.switchToHttp().getRequest<BizRequest>()
-    const response = context.switchToHttp().getResponse<Response>()
+    const _req = context.switchToHttp().getRequest<BizRequest>()
+    const _res = context.switchToHttp().getResponse<Response>()
 
-    const { ip, method, path, query, params, body, requestId, headers } = request
+    const { ip, method, path, query, params, body, requestId, headers } = _req
 
     const record = new InvokeRecord()
     record.requestId = requestId
@@ -60,9 +60,9 @@ export class InvokeRecordInterceptor implements NestInterceptor {
     // Controller handler method name
     record.invokeMethod = context.getHandler().name
 
-    const now = Date.now()
+    const now = _req.requestTimestamp
     // Current timestamp
-    record.timestamp = now
+    record.requestTimestamp = now
 
     return next.handle().pipe(
       tap({
@@ -71,7 +71,7 @@ export class InvokeRecordInterceptor implements NestInterceptor {
             ...record,
             elapsedTime: Date.now() - now,
             response: this.stringifyAndSubstring(res),
-            httpCode: response.statusCode,
+            httpCode: _res.statusCode,
           } satisfies InvokeRecord)
           createRecord.save()
         },

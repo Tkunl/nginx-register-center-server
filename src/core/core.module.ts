@@ -6,7 +6,7 @@ import { InvokeRecordInterceptor } from './interceptor/invoke-record.interceptor
 import { ErrorRecordName, ErrorRecordSchema } from './schema/error-record.schema'
 import { InvokeRecordName, InvokeRecordSchema } from './schema/invoke-record.schema'
 import { RequestIdMiddleware } from './middleware/request-id.middleware'
-import { ResponseInterceptor } from './interceptor/response.interceptor'
+import { GlobalResponseInterceptor } from './interceptor/global-response.interceptor'
 
 @Global()
 @Module({
@@ -30,7 +30,7 @@ import { ResponseInterceptor } from './interceptor/response.interceptor'
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: ResponseInterceptor,
+      useClass: GlobalResponseInterceptor,
     },
   ],
   exports: [],

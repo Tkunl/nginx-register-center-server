@@ -11,4 +11,10 @@ export class TddController {
   async postHelloWorld() {
     return 'hello'
   }
+
+  @Get('internal-error')
+  async getInternalError() {
+    const obj: any = undefined
+    return obj.notExist
+  }
 }

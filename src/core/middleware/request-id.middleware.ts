@@ -10,6 +10,7 @@ export class RequestIdMiddleware implements NestMiddleware {
     const requestId = req.headers[REQUEST_ID]?.toString() ?? uuid()
     const bizReq = req as BizRequest
     bizReq.requestId = requestId
+    bizReq.requestTimestamp = Date.now()
     next()
   }
 }

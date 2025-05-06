@@ -71,10 +71,10 @@ export class BaseRecord {
   elapsedTime: number
 
   /**
-   * timestamp 是请求被接收的时间戳，Unix 时间戳。
+   * requestTimestamp 是请求被接收的时间戳，Unix 时间戳。
    */
   @Prop()
-  timestamp: number
+  requestTimestamp: number
 
   /**
    * response 包含了服务器返回给客户端的响应体内容。
