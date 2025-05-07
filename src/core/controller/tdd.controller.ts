@@ -1,7 +1,7 @@
 import { Controller, Get, Post } from '@nestjs/common'
 
 @Controller('tdd')
-export class TddController {
+export class BaseTddController {
   @Get('hello')
   async getHelloWorld() {
     return 'hello'
