@@ -1,0 +1,12 @@
+*.md
+!README.md
+node_modules/
+dist/
+.git/
+.DS_Store
+.vscode/
+.dockerignore
+.eslintignore
+.eslintrc
+.prettierrc.Dockerfile
+.prettierignore
