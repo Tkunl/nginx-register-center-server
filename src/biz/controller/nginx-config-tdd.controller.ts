@@ -1,11 +1,15 @@
 import { Controller, Get } from '@nestjs/common'
 import * as path from 'path'
 import * as fs from 'fs'
-import ejs from 'ejs'
+import { DockerService } from '../service/docker.service'
+import { R } from 'src/common/po/r.po'
+// import ejs from 'ejs'
 
 @Controller('nx-config-tdd')
 export class NxConfigTddController {
   configPath: '/home/tkunl/Docker/nginx/conf.d/'
+
+  constructor(private dockerService: DockerService) {}
 
   @Get('generate')
   generateNxConfig() {
@@ -51,5 +55,11 @@ export class NxConfigTddController {
     // console.log('process.cwd()', process.cwd())
     // return fullConfig
     return 'ok'
+  }
+
+  @Get('list-containers')
+  async listContainers() {
+    const list = await this.dockerService.listContainers()
+    return R.ok(list)
   }
 }

@@ -1,5 +1,5 @@
 import { isNotNil } from 'es-toolkit'
-import { SysCodeEnum } from '../enum/sys-code.enum'
+import { SysCodeEnum } from '../../core/enum/sys-code.enum'
 
 export class R<T = unknown> {
   code: number

@@ -7,7 +7,6 @@ import { ErrorRecordName, ErrorRecordSchema } from './schema/error-record.schema
 import { InvokeRecordName, InvokeRecordSchema } from './schema/invoke-record.schema'
 import { RequestIdMiddleware } from './middleware/request-id.middleware'
 import { GlobalResponseInterceptor } from './interceptor/global-response.interceptor'
-import { NxConfigTddController } from './controller/nginx-config-tdd.controller'
 
 @Global()
 @Module({
@@ -23,7 +22,7 @@ import { NxConfigTddController } from './controller/nginx-config-tdd.controller'
       },
     ]),
   ],
-  controllers: [BaseTddController, NxConfigTddController],
+  controllers: [BaseTddController],
   providers: [
     {
       provide: APP_INTERCEPTOR,

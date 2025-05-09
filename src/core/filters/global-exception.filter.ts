@@ -2,7 +2,7 @@ import { ArgumentsHost, ExceptionFilter, HttpException } from '@nestjs/common'
 import { BizRequest } from '../type/biz-request.type'
 import { Response } from 'express'
 import { REQUEST_ID, RESPONSE_TIMESTAMP } from '../constant'
-import { R } from '../po/r.po'
+import { R } from '../../common/po/r.po'
 import { SysCodeEnum } from '../enum/sys-code.enum'
 
 export class GlobalExceptionFilter implements ExceptionFilter {
