@@ -5,5 +5,8 @@ import { join } from 'path'
 const YAML_CONFIG_FILENAME = 'config.yaml'
 
 export function projectConfig() {
-  return load(readFileSync(join('src', YAML_CONFIG_FILENAME), 'utf8')) as Record<string, unknown>
+  return load(readFileSync(join(process.cwd(), YAML_CONFIG_FILENAME), 'utf8')) as Record<
+    string,
+    unknown
+  >
 }
