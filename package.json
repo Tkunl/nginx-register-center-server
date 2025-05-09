@@ -9,7 +9,7 @@
     "start:macos-w": "cross-env NODE_ENV=macos nest start --debug --watch",
     "start:ubuntu-w": "cross-env NODE_ENV=ubuntu nest start --debug --watch",
     "build": "nest build",
-    "copy-env": "cp .env.macos .env.ubuntu config.yaml dist/",
+    "copy-env": "cp .env.macos .env.ubuntu .env.docker config.yaml dist/",
     "preview:dist-macos": "cross-env NODE_ENV=macos node dist/main ",
     "preview:dist-ubuntu": "cross-env NODE_ENV=ubuntu node dist/main",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
