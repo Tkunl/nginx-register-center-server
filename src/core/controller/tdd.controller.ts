@@ -1,9 +1,15 @@
-import { Controller, Get, Post } from '@nestjs/common'
+import { Controller, Get, Logger, Post } from '@nestjs/common'
+import { R } from 'src/common/po/r.po'
 
 @Controller('tdd')
 export class BaseTddController {
+  private readonly logger = new Logger(BaseTddController.name)
+
+  constructor() {}
+
   @Get('hello')
   async getHelloWorld() {
+    this.logger.error('hello~~~')
     return 'hello'
   }
 
@@ -15,6 +21,7 @@ export class BaseTddController {
   @Get('internal-error')
   async getInternalError() {
     const obj: any = undefined
-    return obj.notExist
+    const notExist = obj.notExist
+    return R.ok(notExist)
   }
 }

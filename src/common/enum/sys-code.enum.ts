@@ -1,6 +1,9 @@
-export const enum SysCodeEnum {
+export const enum CommonCodeEnum {
   OK = 0,
   ERROR = 10000,
+}
+
+export const enum AuthCodeEnum {
   NEED_ACTIVATED = 10001,
   NO_ANY_PERMISSIONS = 10002,
   NO_SUCH_FILE = 10003,
@@ -16,3 +19,11 @@ export const enum SysCodeEnum {
   LOGIN_EXPIRED = 10013,
   CAN_NOT_RESEND_EMAIL = 10014,
 }
+
+export const enum DockerCodeEnum {
+  DOCKER_CONNECT_ERROR = 20000,
+  CONTAINER_NOT_FOUND = 20001,
+  CONTAINER_RESTART_FAILED = 20002,
+}
+
+export const enum NginxCodeEnum {}

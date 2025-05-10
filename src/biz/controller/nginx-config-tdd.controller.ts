@@ -45,6 +45,7 @@ export class NxConfigTddController {
     // 合并完整配置
     const fullConfig = `${defaultBlock}\n\n${serverBlocks}`
 
+    // 写入配置
     await fsp.writeFile(
       path.join(this.configSvc.get<string>('NGINX_CONFIG_PATH')!, 'nginx.test.conf'),
       fullConfig,
@@ -58,5 +59,17 @@ export class NxConfigTddController {
   async listContainers() {
     const list = await this.dockerSvc.listContainers()
     return R.ok(list)
+  }
+
+  @Get('container-infos')
+  async getContainerInfos() {
+    const infos = await this.dockerSvc.getContainerInfos()
+    return R.ok(infos)
+  }
+
+  @Get('restart-nginx-container')
+  async restartNginxContainer() {
+    await this.dockerSvc.restartNginxContainer()
+    return R.ok()
   }
 }
