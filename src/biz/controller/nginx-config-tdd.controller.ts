@@ -5,11 +5,13 @@ import * as fsp from 'fs/promises'
 import * as path from 'path'
 import { R } from 'src/common/po/r.po'
 import { DockerService } from '../service/docker.service'
+import { LockService } from 'src/common/service/lock.service'
 
 @Controller('nx-config-tdd')
 export class NxConfigTddController {
   constructor(
     private dockerSvc: DockerService,
+    private lockSvc: LockService,
     private configSvc: ConfigService,
   ) {}
 
@@ -70,6 +72,21 @@ export class NxConfigTddController {
   @Get('restart-nginx-container')
   async restartNginxContainer() {
     await this.dockerSvc.restartNginxContainer()
+    return R.ok()
+  }
+
+  @Get('lock-config')
+  async tryLock() {
+    const lock = await this.lockSvc.getNginxConfigLock()
+    try {
+      console.log('开始写入配置...')
+      // 模拟写入配置文件
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      console.log('配置写入完成!')
+    } finally {
+      await this.lockSvc.releaseLock(lock)
+      console.log('锁已释放')
+    }
     return R.ok()
   }
 }

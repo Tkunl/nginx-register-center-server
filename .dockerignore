@@ -10,3 +10,4 @@ dist/
 .eslintrc
 .prettierrc.Dockerfile
 .prettierignore
+.lock

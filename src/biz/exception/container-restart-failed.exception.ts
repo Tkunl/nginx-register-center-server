@@ -1,5 +1,5 @@
 import { DockerCodeEnum } from 'src/common/enum/sys-code.enum'
-import { BizException } from 'src/biz/exception/biz.exception'
+import { BizException } from 'src/common/exception/biz.exception'
 
 export class ContainerRestartFailedException extends BizException {
   constructor() {

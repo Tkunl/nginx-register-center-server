@@ -33,13 +33,13 @@ export class DockerService {
 
   async restartNginxContainer() {
     const containers = await this.docker.listContainers()
-    const nginxConstainer = containers.filter((info) => info.Image.includes('nginx')).at(0)
+    const nginxContainer = containers.filter((info) => info.Image.includes('nginx')).at(0)
 
-    if (!nginxConstainer) {
+    if (!nginxContainer) {
       throw new NginxContainerNotFoundException()
     }
 
-    const container = this.docker.getContainer(nginxConstainer.Id)
+    const container = this.docker.getContainer(nginxContainer.Id)
 
     try {
       await container.restart()

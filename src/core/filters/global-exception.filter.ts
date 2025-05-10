@@ -4,7 +4,7 @@ import { CommonCodeEnum } from '../../common/enum/sys-code.enum'
 import { R } from '../../common/po/r.po'
 import { REQUEST_ID, RESPONSE_TIMESTAMP } from '../constant'
 import { BizRequest } from '../type/biz-request.type'
-import { BizException } from 'src/biz/exception/biz.exception'
+import { BizException } from 'src/common/exception/biz.exception'
 
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {

@@ -27,3 +27,7 @@ export const enum DockerCodeEnum {
 }
 
 export const enum NginxCodeEnum {}
+
+export const enum LockCodeEnum {
+  LOCK_DIR_CREATE_FAILED = 40000,
+}

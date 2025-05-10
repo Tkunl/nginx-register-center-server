@@ -1,5 +1,5 @@
 import { DockerCodeEnum } from 'src/common/enum/sys-code.enum'
-import { BizException } from './biz.exception'
+import { BizException } from '../../common/exception/biz.exception'
 
 export class DockerConnectException extends BizException {
   constructor() {
