@@ -1,0 +1,13 @@
+{
+  "appName": "test-project",
+  "appConfig": [
+    {
+      "env": "dev",
+      "tags": ["feature1", "feature2", "feature3"]
+    },
+    {
+      "env": "test",
+      "tags": ["feature4", "feature5", "feature6"]
+    }
+  ]
+}

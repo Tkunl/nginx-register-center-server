@@ -2,11 +2,11 @@ import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
 import { BaseTddController } from './controller/tdd.controller'
+import { GlobalResponseInterceptor } from './interceptor/global-response.interceptor'
 import { InvokeRecordInterceptor } from './interceptor/invoke-record.interceptor'
+import { RequestIdMiddleware } from './middleware/request-id.middleware'
 import { ErrorRecordName, ErrorRecordSchema } from './schema/error-record.schema'
 import { InvokeRecordName, InvokeRecordSchema } from './schema/invoke-record.schema'
-import { RequestIdMiddleware } from './middleware/request-id.middleware'
-import { GlobalResponseInterceptor } from './interceptor/global-response.interceptor'
 
 @Global()
 @Module({
