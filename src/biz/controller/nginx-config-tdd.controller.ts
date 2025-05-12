@@ -5,13 +5,13 @@ import * as fsp from 'fs/promises'
 import * as path from 'path'
 import { R } from 'src/common/po/r.po'
 import { DockerService } from '../service/docker.service'
-import { LockService } from 'src/common/service/lock.service'
+import { LockerService } from 'src/common/service/locker.service'
 
 @Controller('nx-config-tdd')
 export class NxConfigTddController {
   constructor(
     private dockerSvc: DockerService,
-    private lockSvc: LockService,
+    private lockSvc: LockerService,
     private configSvc: ConfigService,
   ) {}
 

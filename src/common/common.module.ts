@@ -1,11 +1,11 @@
 import { Global, Module } from '@nestjs/common'
-import { LockService } from './service/lock.service'
+import { LockerService } from './service/locker.service'
 
 @Global()
 @Module({
   imports: [],
   controllers: [],
-  providers: [LockService],
-  exports: [LockService],
+  providers: [LockerService],
+  exports: [LockerService],
 })
 export class CommonModule {}

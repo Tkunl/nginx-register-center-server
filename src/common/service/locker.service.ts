@@ -1,13 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common'
+import { LockDirCreateFailedException } from '../exception/lock-dir-create-failed.exception'
 import * as lockfile from 'proper-lockfile'
 import * as path from 'path'
 import * as fs from 'fs'
-import { LockDirCreateFailedException } from '../exception/lock-dir-create-failed.exception'
 
 @Injectable()
-export class LockService {
+export class LockerService {
   private readonly lockDir: string
-  private readonly logger = new Logger(LockService.name)
+  private readonly logger = new Logger(LockerService.name)
+
   // 默认配置（等待 5s，重试 10 次，每次间隔 500ms）
   private defaultOptions = {
     wait: 5000,
@@ -38,7 +39,7 @@ export class LockService {
    * @param options 可选的锁配置（覆盖默认值）
    * @returns 释放锁的函数
    */
-  async acquireLock(resource: string, options: Partial<lockfile.LockOptions> = {}) {
+  private async acquireLock(resource: string, options: Partial<lockfile.LockOptions> = {}) {
     const mergedOptions = { ...this.defaultOptions, ...options }
     const lockFilePath = path.join(this.lockDir, resource)
 
