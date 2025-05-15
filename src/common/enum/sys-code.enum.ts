@@ -29,9 +29,12 @@ export const enum DockerCodeEnum {
 export const enum MongoCodeEnum {
   WRITE_FAILED = 30000,
   READ_FAILED = 30001,
-  APP_NAME_EXISTED = 30002,
 }
 
 export const enum LockerCodeEnum {
   LOCK_DIR_CREATE_FAILED = 40000,
+}
+
+export const enum NginxCodeEnum {
+  APP_NAME_EXISTED = 50000,
 }
