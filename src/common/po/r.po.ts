@@ -21,6 +21,7 @@ export class R<T = unknown> {
     return new R(CommonCodeEnum.OK, 'ok')
   }
 
+  static error(code?: number): R
   static error(code: number): R
   static error(code: number, msg: string): R
   static error<T>(code: number, msg: string, data: T): R

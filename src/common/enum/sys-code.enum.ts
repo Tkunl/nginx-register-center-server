@@ -37,5 +37,6 @@ export const enum LockerCodeEnum {
 }
 
 export const enum NginxCodeEnum {
-  APP_NAME_EXISTED = 50000,
+  APP_NAME_EXIST = 50000,
+  APP_CONFIG_NOT_EXIST = 50001,
 }
