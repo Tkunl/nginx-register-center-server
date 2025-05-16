@@ -7,13 +7,10 @@ export class ErrorRecord extends BaseRecord {
   errorName: string
 
   @Prop()
-  stack: string
+  stack?: string
 
   @Prop()
   errorMessage: string
-
-  @Prop()
-  options: string
 
   constructor() {
     super()

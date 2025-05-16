@@ -8,6 +8,7 @@ import { BizRequest } from '../type/biz-request.type'
 import { ErrorRecord, ErrorRecordName } from '../schema/error-record.schema'
 import { loggerConfig } from '../config/logger.config'
 import { isNotNil } from 'es-toolkit'
+import { isValidationException } from '../utils/is'
 
 @Injectable()
 export class InvokeRecordInterceptor implements NestInterceptor {
@@ -75,16 +76,17 @@ export class InvokeRecordInterceptor implements NestInterceptor {
           } satisfies InvokeRecord)
           createRecord.save()
         },
-        error: (err: any) => {
-          const createRecord = new this.errorRecordModel({
-            ...record,
-            errorName: err.name,
-            stack: err.stack,
-            errorMessage: err.message,
-            options: JSON.stringify(err.options),
-            elapsedTime: Date.now() - now,
-          } satisfies ErrorRecord)
-          createRecord.save()
+        error: (err: Error) => {
+          if (!isValidationException(err)) {
+            const createRecord = new this.errorRecordModel({
+              ...record,
+              errorName: err.name,
+              stack: err.stack,
+              errorMessage: err.message,
+              elapsedTime: Date.now() - now,
+            } satisfies ErrorRecord)
+            createRecord.save()
+          }
         },
       }),
     )

@@ -1,4 +1,5 @@
 export const enum CommonCodeEnum {
+  PARAM_VALIDATION_ERROR = -1,
   OK = 0,
   ERROR = 10000,
 }

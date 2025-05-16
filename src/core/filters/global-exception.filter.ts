@@ -5,6 +5,7 @@ import { R } from '../../common/po/r.po'
 import { REQUEST_ID, RESPONSE_TIMESTAMP } from '../constant'
 import { BizRequest } from '../type/biz-request.type'
 import { BizException } from 'src/common/exception/biz.exception'
+import { isValidationException } from '../utils/is'
 
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
@@ -14,8 +15,22 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     res.header(REQUEST_ID, req.requestId)
     res.header(RESPONSE_TIMESTAMP, req.requestTimestamp + '')
 
+    // 业务异常
     if (exception instanceof BizException) {
       return res.status(200).json(R.error(exception.code, exception.message))
+    }
+
+    // 校验异常
+    if (isValidationException(exception)) {
+      return res
+        .status(200)
+        .json(
+          R.error(
+            CommonCodeEnum.PARAM_VALIDATION_ERROR,
+            exception.message,
+            (exception.getResponse() as { message: unknown }).message,
+          ),
+        )
     }
 
     return res.status(500).json(R.error(CommonCodeEnum.ERROR, exception.message))

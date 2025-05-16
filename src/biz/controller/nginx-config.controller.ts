@@ -20,7 +20,8 @@ export class NxConfigController {
     if (isExist) {
       return R.error(NginxCodeEnum.APP_NAME_EXISTED, '应用名已存在!')
     }
-    const appId = await this.nxConfigSvc.addAppConfig(appInfoDto)
-    return R.ok(appId)
+    // const appId = await this.nxConfigSvc.addAppConfig(appInfoDto)
+    // return R.ok(appId)
+    return R.ok()
   }
 }

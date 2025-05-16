@@ -9,7 +9,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const configSvc = app.get(ConfigService)
 
-  app.useGlobalPipes(new ValidationPipe())
+  // 启用 class-validator 验证
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // 过滤未定义字段
+      transform: true, // 自动转换类型
+      forbidNonWhitelisted: true, // 禁止非白名单字段
+    }),
+  )
+  // 启用 全局异常处理
   app.useGlobalFilters(new GlobalExceptionFilter())
 
   const config = new DocumentBuilder()
