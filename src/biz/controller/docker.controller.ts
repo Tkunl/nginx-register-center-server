@@ -1,13 +1,14 @@
-import { Controller } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { LockerService } from 'src/common/service/locker.service'
+import { Controller, Post } from '@nestjs/common'
 import { DockerService } from '../service/docker.service'
+import { R } from 'src/common/po/r.po'
 
 @Controller('docker')
 export class DockerController {
-  constructor(
-    private lockerSvc: LockerService,
-    private configSvc: ConfigService,
-    private dockerSvc: DockerService,
-  ) {}
+  constructor(private dockerSvc: DockerService) {}
+
+  @Post('restart-nginx-container')
+  async restartNginxContainer() {
+    await this.dockerSvc.restartNginxContainer()
+    return R.ok()
+  }
 }

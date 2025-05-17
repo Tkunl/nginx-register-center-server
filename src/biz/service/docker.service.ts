@@ -31,6 +31,50 @@ export class DockerService {
     return containers
   }
 
+  // TODO 此处显示拉到了镜像但实际查不到
+  async pullImage(imageName: string) {
+    return new Promise<void>((resolve, reject) => {
+      this.docker.pull(imageName, { force: true }, (e: Error, stream: NodeJS.ReadableStream) => {
+        if (e) {
+          this.logger.error(e)
+          return reject(e)
+        }
+
+        let buffer = ''
+        stream.on('data', (chunk: Buffer) => {
+          buffer += chunk.toString()
+
+          // 尝试解析 JSON 数据
+          try {
+            const lines = buffer.trim().split('\n')
+            buffer = '' // 清空已处理的数据
+
+            lines.forEach((line) => {
+              const event = JSON.parse(line)
+              if (event.status && event.progress) {
+                this.logger.log(`[Pulling] ${event.status} - ${event.progress}`)
+              } else if (event.status) {
+                this.logger.log(`[Status] ${event.status}`)
+              }
+            })
+          } catch (parseError) {
+            this.logger.warn('Failed to parse docker pull stream chunk:', parseError.message)
+          }
+        })
+
+        stream.on('end', () => {
+          this.logger.log(`Download Docker image: ${imageName} success`)
+          resolve()
+        })
+
+        stream.on('error', (e) => {
+          this.logger.error(e)
+          reject(e)
+        })
+      })
+    })
+  }
+
   async restartNginxContainer() {
     const containers = await this.docker.listContainers()
     const nginxContainer = containers.filter((info) => info.Image.includes('nginx')).at(0)

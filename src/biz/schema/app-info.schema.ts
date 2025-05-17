@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 @Schema({ _id: false })
-class EnvTag {
+export class EnvTag {
   @Prop({ required: true })
   env: string
 

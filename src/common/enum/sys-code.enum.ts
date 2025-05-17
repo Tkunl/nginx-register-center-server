@@ -1,4 +1,6 @@
+// TODO 错误码待统一整理
 export const enum CommonCodeEnum {
+  IO_ERROR = -2,
   PARAM_VALIDATION_ERROR = -1,
   OK = 0,
   ERROR = 10000,
@@ -39,4 +41,6 @@ export const enum LockerCodeEnum {
 export const enum NginxCodeEnum {
   APP_NAME_EXIST = 50000,
   APP_CONFIG_NOT_EXIST = 50001,
+  EJS_TEMPLATE_READ_FAILED = 50002,
+  CONFIG_WRITE_FAILED = 50003,
 }

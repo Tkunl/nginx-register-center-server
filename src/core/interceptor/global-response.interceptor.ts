@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common'
 import { Observable, tap } from 'rxjs'
 import { REQUEST_ID, RESPONSE_TIMESTAMP } from '../constant'
-import { BizRequest } from '../type/biz-request.type'
+import { BizRequest } from '../types/biz-request'
 import { Response } from 'express'
 
 @Injectable()

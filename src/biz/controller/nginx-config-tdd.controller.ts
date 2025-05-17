@@ -75,6 +75,12 @@ export class NxConfigTddController {
     return R.ok()
   }
 
+  @Get('pull-nginx-image')
+  async pullDockerImage() {
+    await this.dockerSvc.pullImage('nginx:1.27.5-alpine')
+    return R.ok()
+  }
+
   @Get('lock-config')
   async tryLock() {
     const lock = await this.lockSvc.getNginxConfigLock()

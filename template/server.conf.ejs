@@ -2,7 +2,7 @@ server {
     listen       80;
     listen  [::]:80;
     # 此处可以通过使用 http://dev.my-project.192.168.121.141.nip.io 来访问到
-    server_name  ~^(?<subdomain>.*<%= server_tag %>\<%= server_name %>.*)$;
+    server_name  ~^(?<subdomain>.*<%= server_env %>\<%= server_name %>.*)$;
 
     location / {
         root   /usr/share/nginx/html/<%= server_name %>/dev;
