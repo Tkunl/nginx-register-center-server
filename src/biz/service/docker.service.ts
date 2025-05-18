@@ -4,6 +4,9 @@ import * as Docker from 'dockerode'
 import { ContainerRestartFailedException } from '../exception/container-restart-failed.exception'
 import { NginxContainerNotFoundException } from '../exception/nginx-container-not-found.exception'
 import { DockerConnectException } from '../exception/docker-connect.exception'
+import { DockerImagePullFailedException } from '../exception/docker-image-pull-failed.exception'
+import { DockerCommandParser } from '../utils/docker-command-parser'
+import { ContainerStatus } from '../enum/container-status.enum'
 
 @Injectable()
 export class DockerService {
@@ -21,46 +24,25 @@ export class DockerService {
     }
   }
 
-  async listContainers() {
-    const containers = await this.docker.listContainers()
-    return containers.map((c) => c.Names)
-  }
-
   async getContainerInfos() {
     const containers = await this.docker.listContainers()
     return containers
   }
 
-  // TODO 此处显示拉到了镜像但实际查不到
+  async parseDockerCmd(cmd: string) {
+    return DockerCommandParser.parseRunCommand(cmd)
+  }
+
+  /**
+   * 需要使用 root 用户查看拉到的镜像
+   */
   async pullImage(imageName: string) {
-    return new Promise<void>((resolve, reject) => {
-      this.docker.pull(imageName, { force: true }, (e: Error, stream: NodeJS.ReadableStream) => {
+    return new Promise<void>((resolve) => {
+      this.docker.pull(imageName, (e: Error, stream: NodeJS.ReadableStream) => {
         if (e) {
           this.logger.error(e)
-          return reject(e)
+          throw new DockerImagePullFailedException()
         }
-
-        let buffer = ''
-        stream.on('data', (chunk: Buffer) => {
-          buffer += chunk.toString()
-
-          // 尝试解析 JSON 数据
-          try {
-            const lines = buffer.trim().split('\n')
-            buffer = '' // 清空已处理的数据
-
-            lines.forEach((line) => {
-              const event = JSON.parse(line)
-              if (event.status && event.progress) {
-                this.logger.log(`[Pulling] ${event.status} - ${event.progress}`)
-              } else if (event.status) {
-                this.logger.log(`[Status] ${event.status}`)
-              }
-            })
-          } catch (parseError) {
-            this.logger.warn('Failed to parse docker pull stream chunk:', parseError.message)
-          }
-        })
 
         stream.on('end', () => {
           this.logger.log(`Download Docker image: ${imageName} success`)
@@ -69,10 +51,28 @@ export class DockerService {
 
         stream.on('error', (e) => {
           this.logger.error(e)
-          reject(e)
+          throw new DockerImagePullFailedException()
         })
       })
     })
+  }
+
+  // TODO 此处可以正常跑起来, 但 Nginx 配置文件可能存在问题
+  async runContainer(cmd: string) {
+    const containerConfig = DockerCommandParser.parseRunCommand(cmd)
+    const container = await this.docker.createContainer(containerConfig)
+    await container.start()
+    return {
+      id: container.id,
+      status: ContainerStatus.RUNNING,
+    }
+  }
+
+  // TODO 待测试
+  async stopContainer(containerId: string) {
+    const container = this.docker.getContainer(containerId)
+    await container.stop()
+    return { id: containerId, status: ContainerStatus.STOP }
   }
 
   async restartNginxContainer() {

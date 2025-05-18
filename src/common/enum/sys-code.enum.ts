@@ -27,6 +27,7 @@ export const enum DockerCodeEnum {
   DOCKER_CONNECT_ERROR = 20000,
   CONTAINER_NOT_FOUND = 20001,
   CONTAINER_RESTART_FAILED = 20002,
+  IMAGE_PULL_FAILED = 20003,
 }
 
 export const enum MongoCodeEnum {
