@@ -24,17 +24,32 @@ export class DockerService {
     }
   }
 
+  /**
+   * 获取当前 [正在运行] 的容器
+   */
   async getContainerInfos() {
     const containers = await this.docker.listContainers()
     return containers
   }
 
+  /**
+   * 获取当前本地的镜像
+   */
+  async getImagesInfos() {
+    const images = await this.docker.listImages()
+    return images
+  }
+
+  /**
+   * 解析 Docker Command 返回 CreateContainerVo 给 dockerode 消费
+   */
   async parseDockerCmd(cmd: string) {
     return DockerCommandParser.parseRunCommand(cmd)
   }
 
   /**
-   * 需要使用 root 用户查看拉到的镜像
+   * 拉镜像
+   * 注意: 可能需要使用 root 用户查看拉到的镜像, 因为 Docker Desktop 的用户组问题
    */
   async pullImage(imageName: string) {
     return new Promise<void>((resolve, reject) => {
@@ -82,7 +97,10 @@ export class DockerService {
     })
   }
 
-  // TODO 此处可以正常跑起来, 但 Nginx 配置文件可能存在问题
+  /**
+   * 启动 Docker 容器
+   * @param cmd Docker Command
+   */
   async runContainer(cmd: string) {
     const containerConfig = DockerCommandParser.parseRunCommand(cmd)
     const container = await this.docker.createContainer(containerConfig)
@@ -93,13 +111,18 @@ export class DockerService {
     }
   }
 
-  // TODO 待测试
+  /**
+   * 停止 Docker 容器
+   */
   async stopContainer(containerId: string) {
     const container = this.docker.getContainer(containerId)
     await container.stop()
     return { id: containerId, status: ContainerStatus.STOP }
   }
 
+  /**
+   * 重启 Nginx 容器
+   */
   async restartNginxContainer() {
     const containers = await this.docker.listContainers()
     const nginxContainer = containers.filter((info) => info.Image.includes('nginx')).at(0)

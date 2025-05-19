@@ -26,6 +26,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build()
   const document = SwaggerModule.createDocument(app, config)
+  // 通过 http://ip:port/api-doc/ 访问
   SwaggerModule.setup('api-doc', app, document)
 
   app.enableCors()

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
+import { DockerTddController } from './controller/docker-tdd.controller'
 import { DockerController } from './controller/docker.controller'
 import { NxConfigTddController } from './controller/nginx-config-tdd.controller'
 import { NxConfigController } from './controller/nginx-config.controller'
@@ -8,7 +9,7 @@ import { DockerService } from './service/docker.service'
 import { NginxConfigService } from './service/nginx-config.service'
 
 @Module({
-  controllers: [NxConfigTddController, NxConfigController, DockerController],
+  controllers: [NxConfigTddController, NxConfigController, DockerTddController, DockerController],
   providers: [DockerService, NginxConfigService],
   imports: [
     MongooseModule.forFeature([
