@@ -37,21 +37,46 @@ export class DockerService {
    * 需要使用 root 用户查看拉到的镜像
    */
   async pullImage(imageName: string) {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
+      const startTime = Date.now()
+      this.logger.log(`Starting to pull Docker image: ${imageName}...`)
       this.docker.pull(imageName, (e: Error, stream: NodeJS.ReadableStream) => {
         if (e) {
           this.logger.error(e)
           throw new DockerImagePullFailedException()
         }
 
+        const processStream = (chunk: Buffer) => {
+          const lines = chunk
+            .toString()
+            .split('\n')
+            .filter((l) => l.trim())
+          lines.forEach((line) => {
+            try {
+              const { status, id, progress } = JSON.parse(line)
+              if (status === 'Downloading') {
+                this.logger.log(`Downloading layer ${id?.slice(0, 12)}: ${progress}`)
+              } else if (status === 'Extracting') {
+                this.logger.log(`Extracting layer ${id?.slice(0, 12)}: ${progress}`)
+              }
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (e) {
+              // 忽略非JSON内容
+            }
+          })
+        }
+
+        stream.on('data', processStream)
+
         stream.on('end', () => {
-          this.logger.log(`Download Docker image: ${imageName} success`)
+          const duration = Date.now() - startTime
+          this.logger.log(`Successfully pulled image: ${imageName} (took ${duration}ms)`)
           resolve()
         })
 
         stream.on('error', (e) => {
           this.logger.error(e)
-          throw new DockerImagePullFailedException()
+          reject(new DockerImagePullFailedException())
         })
       })
     })

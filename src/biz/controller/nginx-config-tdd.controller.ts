@@ -89,7 +89,7 @@ export class NxConfigTddController {
   }
 
   /**
-   * 测试 Locker Servcie
+   * 测试 Locker Service
    */
   @Get('lock-config')
   async tryLock() {
