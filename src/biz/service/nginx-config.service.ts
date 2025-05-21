@@ -32,7 +32,7 @@ export class NginxConfigService {
   async isAppNameExist(appName: string) {
     let flag: boolean = false
     try {
-      flag = !!(await this.appInfoModel.exists({ appName }))
+      flag = Boolean(await this.appInfoModel.exists({ appName }))
     } catch (e) {
       this.logger.error(e)
       throw new MongoReadFailedException()
@@ -43,7 +43,7 @@ export class NginxConfigService {
   async isAppIdExist(appId: string) {
     let flag: boolean = false
     try {
-      flag = !!(await this.appInfoModel.exists({ appId }))
+      flag = Boolean(await this.appInfoModel.exists({ appId }))
     } catch (e) {
       this.logger.error(e)
       throw new MongoReadFailedException()
@@ -74,10 +74,7 @@ export class NginxConfigService {
   async delAppConfigByAppId(appId: string) {
     try {
       const result = await this.appInfoModel.deleteOne({ appId }).exec()
-      if (result.deletedCount !== 1) {
-        return false
-      }
-      return true
+      return result.deletedCount === 1
     } catch (e) {
       this.logger.error(e)
       throw new MongoWriteFailedException()
@@ -98,10 +95,7 @@ export class NginxConfigService {
           { new: true },
         )
         .exec()
-      if (!result) {
-        return false
-      }
-      return true
+      return result
     } catch (e) {
       this.logger.error(e)
       throw new MongoWriteFailedException()

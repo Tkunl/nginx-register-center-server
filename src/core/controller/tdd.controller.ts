@@ -1,7 +1,7 @@
 import { Controller, Get, Logger, Post } from '@nestjs/common'
 import { R } from 'src/common/po/r.po'
 
-@Controller('tdd')
+@Controller('core-tdd')
 export class BaseTddController {
   private readonly logger = new Logger(BaseTddController.name)
 
