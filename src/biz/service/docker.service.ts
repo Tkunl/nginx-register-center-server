@@ -49,7 +49,6 @@ export class DockerService {
 
   /**
    * 拉镜像
-   * 注意: 可能需要使用 root 用户查看拉到的镜像, 因为 Docker Desktop 的用户组问题
    */
   async pullImage(imageName: string) {
     return new Promise<void>((resolve, reject) => {

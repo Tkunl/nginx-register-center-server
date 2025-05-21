@@ -1,11 +1,11 @@
 import { ArgumentsHost, ExceptionFilter } from '@nestjs/common'
 import { Response } from 'express'
-import { DefaultCode, SystemErrorCode } from '../../common/enum/sys-code.enum'
+import { DefaultCode, DockerErrorCode, SystemErrorCode } from '../../common/enum/sys-code.enum'
 import { R } from '../../common/po/r.po'
 import { REQUEST_ID, RESPONSE_TIMESTAMP } from '../constant'
 import { BizRequest } from '../types/biz-request'
 import { BizException } from 'src/common/exception/biz.exception'
-import { isValidationException } from '../utils/is'
+import { isDockerException, isValidationException } from '../utils/is'
 
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
@@ -31,6 +31,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             (exception.getResponse() as { message: unknown }).message,
           ),
         )
+    }
+
+    // Docker 内部抛出的异常
+    if (isDockerException(exception)) {
+      return res
+        .status(200)
+        .json(R.error(DockerErrorCode.INNER_ERROR, 'DockerInnerException', exception.json.message))
     }
 
     return res.status(500).json(R.error(DefaultCode.ERROR, exception.message))

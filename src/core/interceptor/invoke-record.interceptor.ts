@@ -8,7 +8,7 @@ import { BizRequest } from '../types/biz-request'
 import { ErrorRecord, ErrorRecordName } from '../schema/error-record.schema'
 import { loggerConfig } from '../config/logger.config'
 import { isNotNil } from 'es-toolkit'
-import { isValidationException } from '../utils/is'
+import { isDockerException as isDockerInnerException, isValidationException } from '../utils/is'
 
 @Injectable()
 export class InvokeRecordInterceptor implements NestInterceptor {
@@ -77,16 +77,29 @@ export class InvokeRecordInterceptor implements NestInterceptor {
           createRecord.save()
         },
         error: (err: Error) => {
-          if (!isValidationException(err)) {
-            const createRecord = new this.errorRecordModel({
-              ...record,
-              errorName: err.name,
-              stack: err.stack,
-              errorMessage: err.message,
-              elapsedTime: Date.now() - now,
-            } satisfies ErrorRecord)
-            createRecord.save()
+          let errorName: string
+          // 如果是验证异常，直接跳过
+          if (isValidationException(err)) {
+            return
           }
+          // 处理 Docker 内部异常
+          else if (isDockerInnerException(err)) {
+            errorName = 'DockerInnerException'
+          }
+          // 其他非验证异常使用原错误名
+          else {
+            errorName = err.name
+          }
+
+          // 统一创建错误记录
+          const createRecord = new this.errorRecordModel({
+            ...record,
+            errorName,
+            stack: err.stack,
+            errorMessage: err.message,
+            elapsedTime: Date.now() - now,
+          } satisfies ErrorRecord)
+          createRecord.save()
         },
       }),
     )

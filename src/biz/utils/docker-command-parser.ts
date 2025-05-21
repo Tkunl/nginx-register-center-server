@@ -1,4 +1,4 @@
-import { CreateContainerVo } from '../types/create-container.vo'
+import { CreateContainerVo } from '../types/create-container-vo'
 
 export class DockerCommandParser {
   // 将命令行分解为语义化 token（简化实现）

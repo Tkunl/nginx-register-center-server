@@ -39,10 +39,11 @@ export enum AuthErrorCode {
 }
 
 export enum DockerErrorCode {
-  DOCKER_CONNECT_ERROR = e(ErrorDomain.DOCKER, 1),
-  CONTAINER_NOT_FOUND = e(ErrorDomain.DOCKER, 2),
-  CONTAINER_RESTART_FAILED = e(ErrorDomain.DOCKER, 3),
-  IMAGE_PULL_FAILED = e(ErrorDomain.DOCKER, 4),
+  INNER_ERROR = e(ErrorDomain.DOCKER, 1),
+  CONNECT_ERROR = e(ErrorDomain.DOCKER, 2),
+  CONTAINER_NOT_FOUND = e(ErrorDomain.DOCKER, 3),
+  CONTAINER_RESTART_FAILED = e(ErrorDomain.DOCKER, 4),
+  IMAGE_PULL_FAILED = e(ErrorDomain.DOCKER, 5),
 }
 
 export enum MongoErrorCode {

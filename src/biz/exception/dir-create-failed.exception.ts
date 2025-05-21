@@ -3,6 +3,6 @@ import { BizException } from '../../common/exception/biz.exception'
 
 export class DirCreateFailedException extends BizException {
   constructor() {
-    super(DockerErrorCode.DOCKER_CONNECT_ERROR, 'Failed to connect with docker')
+    super(DockerErrorCode.CONNECT_ERROR, 'Failed to connect with docker')
   }
 }
