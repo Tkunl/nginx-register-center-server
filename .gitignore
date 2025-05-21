@@ -48,7 +48,7 @@ pids
 .lock
 
 # Ignore environment files
-.evn.macos
+.env.macos
 .env.ubuntu
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
