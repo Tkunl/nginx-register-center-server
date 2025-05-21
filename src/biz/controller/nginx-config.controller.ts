@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common'
-import { NginxCodeEnum } from 'src/common/enum/sys-code.enum'
+import { NginxErrorCode } from 'src/common/enum/sys-code.enum'
 import { R } from 'src/common/po/r.po'
 import { AppInfoWithAppIdDto } from '../dto/app-info-with-appid.dto'
 import { AppInfoDto } from '../dto/app-info.dto'
@@ -13,7 +13,7 @@ export class NxConfigController {
   async addAppConfig(@Body() appInfoDto: AppInfoDto) {
     const isExist = await this.nxConfigSvc.isAppNameExist(appInfoDto.appName)
     if (isExist) {
-      return R.error(NginxCodeEnum.APP_NAME_EXIST, 'App name existed')
+      return R.error(NginxErrorCode.APP_NAME_EXIST, 'App name existed')
     }
     const appId = await this.nxConfigSvc.addAppConfig(appInfoDto)
     return R.ok(appId)
@@ -23,7 +23,7 @@ export class NxConfigController {
   async deleteAppConfig(@Body('appId') appId: string) {
     const flag = await this.nxConfigSvc.delAppConfigByAppId(appId)
     if (!flag) {
-      return R.error(NginxCodeEnum.APP_CONFIG_NOT_EXIST, 'App config not exist')
+      return R.error(NginxErrorCode.APP_CONFIG_NOT_EXIST, 'App config not exist')
     }
     return R.ok()
   }
@@ -32,7 +32,7 @@ export class NxConfigController {
   async editAppConfig(@Body() appInfoDto: AppInfoWithAppIdDto) {
     const flag = await this.nxConfigSvc.editAppConfigByAppId(appInfoDto)
     if (!flag) {
-      return R.error(NginxCodeEnum.APP_CONFIG_NOT_EXIST, 'App config not exist')
+      return R.error(NginxErrorCode.APP_CONFIG_NOT_EXIST, 'App config not exist')
     }
     return R.ok()
   }

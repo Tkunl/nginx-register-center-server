@@ -1,6 +1,6 @@
 import { ArgumentsHost, ExceptionFilter } from '@nestjs/common'
 import { Response } from 'express'
-import { CommonCodeEnum } from '../../common/enum/sys-code.enum'
+import { DefaultCode, SystemErrorCode } from '../../common/enum/sys-code.enum'
 import { R } from '../../common/po/r.po'
 import { REQUEST_ID, RESPONSE_TIMESTAMP } from '../constant'
 import { BizRequest } from '../types/biz-request'
@@ -26,13 +26,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         .status(200)
         .json(
           R.error(
-            CommonCodeEnum.PARAM_VALIDATION_ERROR,
+            SystemErrorCode.PARAM_VALIDATION_ERROR,
             exception.message,
             (exception.getResponse() as { message: unknown }).message,
           ),
         )
     }
 
-    return res.status(500).json(R.error(CommonCodeEnum.ERROR, exception.message))
+    return res.status(500).json(R.error(DefaultCode.ERROR, exception.message))
   }
 }
