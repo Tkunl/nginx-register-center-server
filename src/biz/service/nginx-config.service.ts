@@ -51,6 +51,19 @@ export class NginxConfigService {
     return flag
   }
 
+  async getAppNameByAppId(appId: string) {
+    try {
+      const appInfo = await this.appInfoModel.findOne({ appId }).exec()
+      if (appInfo && appInfo.appName) {
+        return appInfo.appName
+      }
+      return ''
+    } catch (e) {
+      this.logger.error(`Failed to get appName for appId ${appId}: ${e}`)
+      throw new MongoReadFailedException()
+    }
+  }
+
   async addAppConfig(appInfoDto: AppInfoDto) {
     const now = Date.now()
     const appId = uuid()

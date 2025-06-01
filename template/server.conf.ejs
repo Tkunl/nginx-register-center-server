@@ -1,7 +1,8 @@
 server {
     listen       80;
     listen  [::]:80;
-    # 此处可以通过使用 http://dev.my-project.192.168.121.141.nip.io 来访问到
+    # 其中 192.168.121.141 是 Nginx 应用的 ip 地址
+    # 此处可以通过使用 http://<%= server_env %>.<%= server_name %>.192.168.121.141.nip.io 来访问到
     server_name  ~^(?<subdomain>.*<%= server_env %>\.<%= server_name %>.*)$;
 
     location / {

@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import { NginxErrorCode } from 'src/common/enum/sys-code.enum'
 import { R } from 'src/common/po/r.po'
 import { AppInfoWithAppIdDto } from '../dto/app-info-with-appid.dto'
@@ -35,6 +35,12 @@ export class NxConfigController {
       return R.error(NginxErrorCode.APP_CONFIG_NOT_EXIST, 'App config not exist')
     }
     return R.ok()
+  }
+
+  @Get('app-name/get')
+  async getAppName(@Query('appId') appId: string) {
+    const appName = await this.nxConfigSvc.getAppNameByAppId(appId)
+    return R.ok(appName)
   }
 
   @Post('app-config/generate')
